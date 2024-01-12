@@ -1,0 +1,1 @@
+import{q as r,J as e,x as t,E as i}from"./index-3f36fa08.js";import{s as o}from"./strapi-fb584718.js";const _="warehouses",u=async(s,a)=>r(i,async()=>e(await t.get(_,o.buiid_pager(s,a))));export{u as s};

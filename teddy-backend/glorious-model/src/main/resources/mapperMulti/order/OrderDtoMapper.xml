@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapperMulti.order.OrderDtoMapper">
+
+    <sql id="tabNameMe">
+        odr_order as me</sql>
+    <sql id="columnsMe">
+        me.id as me_id, me.order_id as me_order_id, me.order_date as me_order_date, me.status as me_status, me.total_price as me_total_price,
+        me.discount as me_discount, me.payment_method as me_payment_method, me.ordered_product as me_ordered_product, me.refunded_remarks as me_refunded_remarks,
+        me.ordered_product_after_refund as me_ordered_product_after_refund, me.total_price_after_refund as me_total_price_after_refund, me.total_profit_after_refund as me_total_profit_after_refund,
+        me.cashier_sql_id as me_cashier_sql_id</sql>
+
+    <sql id="tabNameUser">
+        sys_user as one on me.cashier_sql_id = one.id </sql>
+    <sql id="columnsUser">
+        one.id as one_id, one.name as one_name, one.email as one_email</sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as two on me.storehouse_sql_id = two.id</sql>
+    <sql id="columnsStorehouse">
+        two.id as two_id, two.name as two_name, two.phone_no as two_phone_no, two.address as two_address, two.facebook as two_facebook</sql>
+
+    <sql id="tabNameCustomer">
+        csm_customer as three on me.customer_sql_id = three.id</sql>
+    <sql id="columnsCustomer">
+        three.id as three_id, three.name as three_name, three.email as three_email</sql>
+
+    <sql id="tabNameCustomerLevel">
+        csm_custom_level as four on me.customer_level_sql_id = four.id</sql>
+    <sql id="columnsCustomerLevel">
+        four.id as four_id, four.name as four_name</sql>
+
+    <!-- 深度 列表 -->
+    <resultMap id="Deep" type="com.glorious.model.dto.order.OrderDto">
+        <id property="id" column="me_id" />
+        <result property="order_id" column="me_order_id" />
+        <result property="order_date" column="me_order_date" />
+        <result property="total_price" column="me_total_price" />
+        <result property="status" column="me_status" />
+        <result property="discount" column="me_discount" />
+        <result property="payment_method" column="me_payment_method" />
+        <result property="ordered_product" column="me_ordered_product" />
+        <result property="refunded_remarks" column="me_refunded_remarks" />
+
+        <result property="ordered_product_after_refund" column="me_ordered_product_after_refund" />
+        <result property="total_profit_after_refund" column="me_total_profit_after_refund" />
+        <result property="total_price_after_refund" column="me_total_price_after_refund" />
+
+        <association property="cashier" javaType="com.glorious.model.entity.sys.User">
+            <id property="id" column="one_id" />
+            <result property="name" column="one_name"/>
+            <result property="email" column="one_email"/>
+        </association>
+        <association property="storehouse" javaType="com.glorious.model.entity.base.Storehouse">
+            <id property="id" column="two_id" />
+            <result property="name" column="two_name"/>
+            <result property="address" column="two_address"/>
+            <result property="phone_no" column="two_phone_no"/>
+            <result property="facebook" column="two_facebook"/>
+        </association>
+        <association property="customer" javaType="com.glorious.model.entity.custom.Customer">
+            <id property="id" column="three_id" />
+            <result property="name" column="three_name"/>
+            <result property="email" column="three_email"/>
+        </association>
+        <association property="customer_level" javaType="com.glorious.model.entity.custom.CustomerLevel">
+            <id property="id" column="four_id" />
+            <result property="name" column="four_name"/>
+        </association>
+    </resultMap>
+
+    <!-- 深度 列表 -->
+    <select id="multiDeep" resultMap="Deep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsUser" />, <include refid="columnsStorehouse" />, <include refid="columnsCustomer" />, <include refid="columnsCustomerLevel" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameUser" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+            LEFT JOIN <include refid="tabNameCustomer" />
+            LEFT JOIN <include refid="tabNameCustomerLevel" />
+        ${ ew.customSqlSegment }
+    </select>
+
+</mapper>

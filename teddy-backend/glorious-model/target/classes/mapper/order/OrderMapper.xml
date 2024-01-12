@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapper.order.OrderMapper">
+
+    <sql id="tabNameOrder">
+        odr_order as me
+    </sql>
+    <sql id="columnsOrder">
+        me.id as me_id,
+        me.order_id as me_order_id,
+        me.order_date as me_order_date,
+        me.total_price as me_total_price,
+        me.order_status as me_order_status,
+        me.storehouse_sql_id as me_storehouse_sql_id
+    </sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as one on me.storehouse_sql_id=one.id
+    </sql>
+    <sql id="columnsStorehouse">
+        one.id as one_id,
+        one.name as one_name,
+        one.address as one_address,
+        one.phone_no as one_phone_no
+    </sql>
+
+    <sql id="tabNameCustomer">
+        csm_customer as two on me.customer_sql_id=two.id
+    </sql>
+    <sql id="columnsCustomer">
+        two.id as two_id,
+        two.name as two_name
+    </sql>
+
+    <!-- 最后一个 -->
+    <select id="multiDeep" resultType="com.glorious.model.entity.order.Order">
+        SELECT
+        <include refid="columnsOrder" />,
+        <include refid="columnsStorehouse" />,
+        <include refid="columnsCustomer" />
+            FROM
+            <include refid="tabNameOrder" />
+            LEFT JOIN
+            <include refid="tabNameStorehouse" />
+            LEFT JOIN
+            <include refid="tabNameCustomer" />
+            ${ ew.customSqlSegment }
+    </select>
+
+</mapper>

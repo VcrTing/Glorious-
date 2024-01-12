@@ -1,0 +1,13 @@
+
+mail:
+  name: VcrTing
+  recipient: vcrting@163.com
+
+system:
+  # 大於 1 件的 銷量 算 熱賣
+  hot-sale-limit: 1
+  hot-sale-title: 產品熱銷列表
+
+  # 小於 10 件 庫存 算少貨
+  less-inventory-limit: 15
+  less-inventory-title: 產品缺貨列表

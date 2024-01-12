@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="glorious-model" />
+        <module name="glorious-common" />
+        <module name="glorious-system" />
+        <module name="utils" />
+        <module name="glorious-framework" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="glorious-model (1)" target="1.8" />
+      <module name="glorious-model (1) (org.example)" target="1.7" />
+      <module name="glorious-model (2)" target="1.5" />
+      <module name="glorious-model (2) (com.glorious)" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

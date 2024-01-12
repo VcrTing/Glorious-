@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapperMulti.restock.InvoiceDtoMapper">
+
+    <sql id="tabNameMe">
+        sok_invoice as me</sql>
+    <sql id="columnsMe">
+        me.id as me_id, me.date as me_date, me.invoice_id as me_invoice_id,
+        me.total_price as me_total_price, me.total_quantity as me_total_quantity, me.restocks as me_restocks</sql>
+
+    <sql id="tabNameSupplier">
+        bas_supplier as one on me.supplier_sql_id = one.id </sql>
+    <sql id="columnsSupplier">
+        one.id as one_id, one.name as one_name, one.supplier_id as one_supplier_id</sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as two on me.storehouse_sql_id = two.id</sql>
+    <sql id="columnsStorehouse">
+        two.id as two_id, two.name as two_name, two.address as two_address, two.phone_no as two_phone_no</sql>
+
+    <!-- 深度 列表 -->
+    <resultMap id="Deep" type="com.glorious.model.dto.restock.InvoiceDto">
+        <id property="id" column="me_id" />
+        <result property="date" column="me_date" />
+        <result property="restocks" column="me_restocks" />
+        <result property="invoice_id" column="me_invoice_id" />
+        <result property="total_price" column="me_total_price" />
+        <result property="total_quantity" column="me_total_quantity" />
+
+        <association property="supplier" javaType="com.glorious.model.entity.base.Supplier">
+            <id property="id" column="one_id" />
+            <result property="name" column="one_name"/>
+            <result property="supplier_id" column="one_supplier_id"/>
+        </association>
+        <association property="storehouse" javaType="com.glorious.model.entity.base.Storehouse">
+            <id property="id" column="two_id" />
+            <result property="name" column="two_name"/>
+            <result property="address" column="two_address"/>
+            <result property="phone_no" column="two_phone_no"/>
+        </association>
+    </resultMap>
+
+    <!-- 深度 列表 -->
+    <select id="multiDeep" resultMap="Deep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsSupplier" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameSupplier" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+        ${ ew.customSqlSegment }
+    </select>
+
+    <!-- 深度 单个 -->
+    <select id="oneDeep" resultMap="Deep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsSupplier" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameSupplier" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+        WHERE me.id = #{id}
+    </select>
+</mapper>

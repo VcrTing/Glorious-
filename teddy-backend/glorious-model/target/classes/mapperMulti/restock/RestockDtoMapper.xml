@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapperMulti.restock.RestockDtoMapper">
+
+    <sql id="tabNameMe">
+        sok_restock as me</sql>
+    <sql id="columnsMe">
+        me.id as me_id, me.restock_date as me_restock_date, me.restock_distribute as me_restock_distribute,
+        me.restock_price as me_restock_price, me.lowest_price as me_lowest_price, me.selling_price as me_selling_price,
+        me.total_quantity as me_total_quantity, me.total_amount as me_total_amount</sql>
+
+    <sql id="tabNameSupplier">
+        bas_supplier as one on me.supplier_sql_id = one.id </sql>
+    <sql id="columnsSupplier">
+        one.id as one_id, one.name as one_name</sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as two on me.storehouse_sql_id = two.id</sql>
+    <sql id="columnsStorehouse">
+        two.id as two_id, two.name as two_name, two.address as two_address, two.phone_no as two_phone_no</sql>
+
+    <!-- 深度 列表 -->
+    <resultMap id="byProduct" type="com.glorious.model.dto.restock.RestockDto">
+        <id property="id" column="me_id" />
+        <result property="restock_date" column="me_restock_date" />
+        <result property="lowest_price" column="me_lowest_price" />
+        <result property="restock_price" column="me_restock_price" />
+        <result property="selling_price" column="me_selling_price" />
+
+        <result property="total_amount" column="me_total_amount" />
+        <result property="total_quantity" column="me_total_quantity" />
+        <result property="restock_distribute" column="me_restock_distribute" />
+
+        <association property="supplier" javaType="com.glorious.model.entity.base.Supplier">
+            <id property="id" column="one_id" />
+            <result property="name" column="one_name"/>
+        </association>
+
+        <association property="storehouse" javaType="com.glorious.model.entity.base.Storehouse">
+            <id property="id" column="two_id" />
+            <result property="name" column="two_name"/>
+            <result property="address" column="two_address"/>
+            <result property="phone_no" column="two_phone_no"/>
+        </association>
+    </resultMap>
+
+    <!-- by product -->
+    <select id="byProduct" resultMap="byProduct">
+        SELECT <include refid="columnsMe" />, <include refid="columnsSupplier" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameSupplier" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+        WHERE me.product_sql_id = #{pid}
+    </select>
+</mapper>

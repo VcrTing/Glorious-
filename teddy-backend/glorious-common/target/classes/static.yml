@@ -1,0 +1,8 @@
+
+static:
+  interview-header: uploads
+  xlsx-folder: xlsx
+  xlsx-file-type: xls
+  xlsx-folder-hot-sale: hot_sale
+  xlsx-folder-less-inventory: less_inventory
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapperMulti.product.ProductOfVariationAndStorehouseDtoMapper">
+
+    <sql id="tabNameMe">
+        pod_product_of_variation_and_storehouse as me</sql>
+    <sql id="columnsMe">
+        me.id as me_id, me.quantity as me_quantity,
+        me.product_sql_id as me_product_sql_id, me.variation_sql_id as me_variation_sql_id, me.storehouse_sql_id as me_storehouse_sql_id</sql>
+
+    <sql id="tabNameVariation">
+        pod_variation as one on me.variation_sql_id = one.id </sql>
+    <sql id="columnsVariation">
+        one.id as one_id, one.name as one_name</sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as two on me.storehouse_sql_id = two.id</sql>
+    <sql id="columnsStorehouse">
+        two.id as two_id, two.name as two_name, two.address as two_address, two.phone_no as two_phone_no</sql>
+
+    <sql id="tabNameProduct">
+        pod_product as three on me.product_sql_id = three.id</sql>
+    <sql id="columnsProduct">
+        three.id as three_id, three.product_id as three_product_id, three.name as three_name, three.new_selling_price as three_new_selling_price</sql>
+
+    <!-- 深度 列表 -->
+    <resultMap id="multiDeep" type="com.glorious.model.dto.product.ProductOfVariationAndStorehouseDto">
+        <id property="id" column="me_id" />
+        <result property="quantity" column="me_quantity" />
+        <result property="product_sql_id" column="me_product_sql_id" />
+        <result property="variation_sql_id" column="me_variation_sql_id" />
+        <result property="storehouse_sql_id" column="me_storehouse_sql_id" />
+
+        <association property="variation" javaType="com.glorious.model.entity.product.Variation">
+            <id property="id" column="one_id" />
+            <result property="name" column="one_name"/>
+        </association>
+        <association property="storehouse" javaType="com.glorious.model.entity.base.Storehouse">
+            <id property="id" column="two_id" />
+            <result property="name" column="two_name"/>
+            <result property="address" column="two_address"/>
+            <result property="phone_no" column="two_phone_no"/>
+        </association>
+        <association property="product" javaType="com.glorious.model.entity.product.Product">
+            <id property="id" column="three_id" />
+            <result property="name" column="three_name"/>
+            <result property="product_id" column="three_product_id"/>
+            <result property="new_selling_price" column="three_new_selling_price"/>
+        </association>
+    </resultMap>
+
+    <!-- 深度 列表 -->
+    <select id="multiDeep" resultMap="multiDeep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsVariation" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameVariation" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+    </select>
+
+    <!-- 单个 by product -->
+    <select id="multiDeepByProduct" resultMap="multiDeep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsVariation" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameVariation" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+        where me.product_sql_id = #{pid}
+    </select>
+
+    <!-- 表格 列表 -->
+    <select id="excelDeep" resultMap="multiDeep">
+        SELECT <include refid="columnsMe" />, <include refid="columnsVariation" />, <include refid="columnsStorehouse" />, <include refid="columnsProduct" />
+        FROM <include refid="tabNameMe" />
+            LEFT JOIN <include refid="tabNameVariation" />
+            LEFT JOIN <include refid="tabNameStorehouse" />
+            LEFT JOIN <include refid="tabNameProduct" />
+        ${ ew.customSqlSegment }
+    </select>
+</mapper>

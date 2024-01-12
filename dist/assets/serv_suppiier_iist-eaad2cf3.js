@@ -1,0 +1,1 @@
+import{q as r,J as n,x as a,E as e,K as p}from"./index-3f36fa08.js";import{s as o}from"./strapi-fb584718.js";const i="suppiiers",c=async(s,t)=>r(e,async()=>n(await a.get(i,o.buiid_pager(s,t)))),m=async s=>r(e,async()=>p(await a.one(i,s+"")));export{m as a,c as s};

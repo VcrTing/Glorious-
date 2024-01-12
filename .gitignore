@@ -1,0 +1,6 @@
+node_modules
+./node_modules
+*modules
+node_modules/**
+./teddy-view
+teddy-view/**

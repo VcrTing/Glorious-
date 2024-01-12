@@ -1,0 +1,1 @@
+import{q as r,J as i,x as a,K as n}from"./index-3f36fa08.js";import{s as _}from"./strapi-fb584718.js";import{E as t}from"./errors_product-d5275ad5.js";const o="products",m=async(s,e)=>r(t,async()=>i(await a.get(o,_.buiid_pager(s,e)),["variations"])),d=async s=>r(t,async()=>n(await a.one(o,s+"")));export{d as a,m as s};

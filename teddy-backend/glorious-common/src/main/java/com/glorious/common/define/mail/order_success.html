@@ -1,0 +1,75 @@
+<body>
+    <style>
+        html {
+            background: #f7f8f9;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            width: 100%;
+            max-width: calc(400px + 12vw);
+            margin: 12px auto;
+            padding: 48px 36px;
+            border-radius: 6px;
+            background-color: #e9edf0;
+            border: 1px solid #d0d6db;
+        }
+        .header {
+            color: #08090b;
+        }
+        .content {
+            color: #1a1b1d;
+            padding-top: 12px;
+        }
+        .success {
+            color: #2ddf1c;
+        }
+        .error {
+            color: #e7223c;
+        }
+        .item {
+            display: block;
+            padding: 6px 0px;
+        }
+        .item > p, .item > div { display: inline-block; }
+        .fx-l {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        h2 {
+            font-size: 36px;
+        }
+        .img {
+            max-width: calc(90px + 6vw);
+            border-radius: 100%;
+        }
+        .pl { padding-left: 12px; }
+    </style>
+    <div class="page">
+        <div class="banner">
+            <div class="fx-l">
+                <img class="img" src="https://img2.baidu.com/it/u=516166943,3974957162&fm=253&fmt=auto&app=138&f=JPEG?w=324&h=324"/>
+                <h2 class="success pl">下单成功</h2>
+            </div>
+        </div>
+        <div class="content">
+            <div class="item">
+                <p>状态：</p>
+                <div class="status success">成功</div>
+            </div>
+            <div class="item">
+                <p>下单金额：</p>
+                <div class="price">888</div>
+            </div>
+            <div class="item">
+                <p>下单时间：</p>
+                <div class="time">2024-1-1 12:12</div>
+            </div>
+        </div>
+    </div>
+</body>

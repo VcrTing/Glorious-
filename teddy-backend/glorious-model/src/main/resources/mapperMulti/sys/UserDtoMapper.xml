@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.glorious.model.mapperMulti.sys.UserDtoMapper">
+
+    <sql id="tabNameUser">
+        sys_user as me
+    </sql>
+    <sql id="columnsUser">
+        me.id as "id",
+        me.name as "name",
+        me.email as "email",
+        me.phone_no as "phone_no",
+        me.is_admin as "is_admin"
+    </sql>
+
+    <sql id="tabNameStorehouse">
+        bas_storehouse as one ON me.storehouse_sql_id = one.id
+    </sql>
+    <sql id="columnsStorehouse">
+        one.id as "one_id",
+        one.name as "one_name",
+        one.phone_no as "one_phone_no",
+        one.contact_person as "one_contact_person"
+    </sql>
+
+    <resultMap id="userWithStorehouse" type="com.glorious.model.dto.sys.UserDto">
+        <id column="id" property="id" />
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="phone_no" property="phone_no"/>
+        <result column="is_admin" property="is_admin"/>
+        <association property="storehouse" javaType="com.glorious.model.entity.base.Storehouse">
+            <id property="id" column="one_id"/>
+            <result property="name" column="one_name"/>
+        </association>
+    </resultMap>
+
+    <select id="multiDeep" resultMap="userWithStorehouse">
+        SELECT <include refid="columnsUser" />, <include refid="columnsStorehouse" />
+        FROM <include refid="tabNameUser"/>
+            LEFT JOIN <include refid="tabNameStorehouse"/>
+        ${ ew.customSqlSegment }
+    </select>
+
+</mapper>
